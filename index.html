@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .category-section,
+        .product-section {
+            margin-bottom: 20px;
+        }
+
+        .category-section input,
+        .product-section input,
+        .product-section select {
+            padding: 10px;
+            margin-right: 10px;
+            width: 200px;
+        }
+
+        .product-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .product-table th,
+        .product-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+
+        .print-btn {
+            background-color: #2196F3;
+        }
+
+        /* Media query for print */
+        @media print {
+            body {
+                font-size: 12px;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
+            /* Hide input sections and buttons */
+            .category-section,
+            .product-section,
+            .total,
+            .print-btn {
+                display: none;
+            }
+
+            /* Center the table */
+            .product-table {
+                width: 90%;
+                margin: 20px auto;
+                border-collapse: collapse;
+            }
+
+            /* Ensure the total amount is displayed at the bottom of the table */
+            .total {
+                display: block;
+                width: 100%;
+                text-align: right;
+                margin-top: 20px;
+                font-size: 1.2em;
+                position: absolute;
+                bottom: 50px;
+            }
+
+            /* Ensure h1 stays centered and visible */
+            h1 {
+                text-align: center;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Budget Expense Tracker</h1>
+
+        <!-- Category Input -->
+        <div class="category-section">
+            <input type="text" id="category" placeholder="Enter Category" />
+            <button onclick="addCategory()">Add Category</button>
+        </div>
+
+        <!-- Product Input -->
+        <div class="product-section">
+            <select id="category-select">
+                <option value="">Select Category</option>
+            </select>
+            <input type="text" id="product-name" placeholder="Product Name" />
+            <input type="number" id="product-price" placeholder="Price" min="0" />
+            <input type="number" id="product-quantity" placeholder="Quantity" min="1" />
+            <button onclick="addProduct()">Add Product</button>
+        </div>
+
+        <!-- Product Table -->
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="product-list">
+                <!-- Product rows will appear here -->
+            </tbody>
+        </table>
+
+        <div class="total">
+            <span>Total Amount: $<span id="total-amount">0.00</span></span>
+        </div>
+
+        <!-- Print Button -->
+        <button class="print-btn" onclick="printPage()">Print</button>
+    </div>
+
+    <script>
+        let categories = [];
+        let products = [];
+        let totalAmount = 0;
+
+        // Add a new category
+        function addCategory() {
+            const categoryInput = document.getElementById('category');
+            const categoryName = categoryInput.value.trim();
+
+            if (categoryName && !categories.includes(categoryName)) {
+                categories.push(categoryName);
+                const categorySelect = document.getElementById('category-select');
+                const option = document.createElement('option');
+                option.value = categoryName;
+                option.textContent = categoryName;
+                categorySelect.appendChild(option);
+                categoryInput.value = ''; // Clear input
+            }
+        }
+
+        // Add a product with price and quantity
+        function addProduct() {
+            const categorySelect = document.getElementById('category-select');
+            const productName = document.getElementById('product-name').value.trim();
+            const productPrice = parseFloat(document.getElementById('product-price').value);
+            const productQuantity = parseInt(document.getElementById('product-quantity').value);
+
+            if (!categorySelect.value || !productName || isNaN(productPrice) || isNaN(productQuantity) || productPrice <= 0 || productQuantity <= 0) {
+                alert("Please fill in all fields correctly.");
+                return;
+            }
+
+            // Add product to the products array
+            const product = {
+                category: categorySelect.value,
+                name: productName,
+                price: productPrice,
+                quantity: productQuantity,
+                total: productPrice * productQuantity
+            };
+
+            products.push(product);
+
+            // Add product to the table
+            const productList = document.getElementById('product-list');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.category}</td>
+                <td>${product.name}</td>
+                <td>$${product.price.toFixed(2)}</td>
+                <td>${product.quantity}</td>
+                <td>$${product.total.toFixed(2)}</td>
+            `;
+            productList.appendChild(row);
+
+            // Update total amount
+            totalAmount += product.total;
+            document.getElementById('total-amount').textContent = totalAmount.toFixed(2);
+
+            // Clear input fields
+            document.getElementById('product-name').value = '';
+            document.getElementById('product-price').value = '';
+            document.getElementById('product-quantity').value = '';
+        }
+
+        // Print the page as A4
+        function printPage() {
+            window.print();
+        }
+    </script>
+</body>
+
+</html>
+
