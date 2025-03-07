@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Budget Expense Tracker</title>
     <style>
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -20,19 +21,24 @@
 
         h1 {
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .category-section,
         .product-section {
             margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .category-section input,
         .product-section input,
         .product-section select {
             padding: 10px;
-            margin-right: 10px;
-            width: 200px;
+            width: 100%;
+            max-width: 200px;
+            box-sizing: border-box;
         }
 
         .product-table {
@@ -68,7 +74,77 @@
             background-color: #2196F3;
         }
 
-        /* Media query for print */
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .category-section,
+            .product-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .category-section input,
+            .product-section input,
+            .product-section select {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .product-table th,
+            .product-table td {
+                padding: 12px;
+            }
+
+            .total {
+                font-size: 1em;
+            }
+
+            button {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category-section input,
+            .product-section input,
+            .product-section select {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .product-table th,
+            .product-table td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+
+            .total {
+                font-size: 1em;
+                padding-right: 20px;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px;
+            }
+
+            .print-btn {
+                width: 100%;
+                padding: 12px;
+                margin-top: 10px;
+            }
+        }
+
+        /* Print Styles */
         @media print {
             body {
                 font-size: 12px;
@@ -82,7 +158,7 @@
                 margin: 0;
             }
 
-            /* Hide input sections and buttons */
+            /* Hide input sections and buttons during print */
             .category-section,
             .product-section,
             .total,
@@ -90,14 +166,14 @@
                 display: none;
             }
 
-            /* Center the table */
+            /* Center the table during print */
             .product-table {
                 width: 90%;
                 margin: 20px auto;
                 border-collapse: collapse;
             }
 
-            /* Ensure the total amount is displayed at the bottom of the table */
+            /* Ensure total amount appears at the bottom */
             .total {
                 display: block;
                 width: 100%;
@@ -108,7 +184,7 @@
                 bottom: 50px;
             }
 
-            /* Ensure h1 stays centered and visible */
+            /* Ensure h1 stays centered during print */
             h1 {
                 text-align: center;
                 margin-top: 20px;
@@ -237,4 +313,5 @@
 </body>
 
 </html>
+
 
